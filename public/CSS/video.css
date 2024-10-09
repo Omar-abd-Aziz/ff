@@ -15,9 +15,6 @@
     height: 50px;
 }
 
-#play{
-    display: none;
-}
 
 
 #muted{
@@ -27,12 +24,9 @@
 #forward, #backward, #play-stop{
    border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.5);
-
 }
 
-#forward, #play-stop, #backward {
-    display: none;
-  }
+
 
 .icon p{
     margin: 0;
