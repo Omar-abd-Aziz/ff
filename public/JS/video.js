@@ -7,8 +7,8 @@ let shareCount = urlParams.get('sharesCount') ?? 0;
 let encryptedID = urlParams.get('id');  // Assume the ID is encrypted in the URL
 // document.getElementById('forward').style.display = 'none';
 // document.getElementById('backward').style.display = 'none';
-document.getElementById('play-stop').style.display = 'none';
-togglePlayStopIcons(false);
+// document.getElementById('play-stop').style.display = 'none';
+
 
 if (encryptedID) {
     fetch(`https://www.knlibya.com/video?id=${encryptedID}`) // Point to the backend
@@ -18,13 +18,10 @@ if (encryptedID) {
             }
             return response.json();
         })
-        .then(async data => {
-            let url = decodeURIComponent(data.url);
-
-            let videoElement = document.getElementById('video');
-            videoElement.src = url;
+        .then(data => {
 
             // decode url
+            let url = decodeURIComponent(data.url);
             let thumbnail = decodeURIComponent(data.thumbnailFirebaseUrl);
 
             let OGopject =
@@ -49,21 +46,11 @@ if (encryptedID) {
             // show thumbnail as background image
             document.querySelector('.video').style.backgroundImage = `url(${thumbnail})`;
             // Update the video URL and other details
-     // Ensure 'data.url' is the correct field name
+            let videoElement = document.getElementById('video');
+            videoElement.src = url; // Ensure 'data.url' is the correct field name
             // function to hide three bottoms
-            await videoElement.load();
-            videoElement.play(); // Play the video
-   
-            videoElement.muted = false;
-
-            setTimeout(() => {
-                document.querySelector('#play-stop').style.display = 'none';
-                document.querySelector('#play').style.display = 'none';
-                document.querySelector('#stop').style.display = 'flex';
-            }, 500);
-            
-            // Reload the video source
-
+            // videoElement.load(); // Reload the video source
+            // videoElement.play(); // Play the video
 
             // make video element not visible
             videoElement.style.display = 'none';
@@ -79,7 +66,6 @@ if (encryptedID) {
             document.getElementById('commentCount').innerText = commentCount;
             document.getElementById('likeCount').innerText = likeCount;
             document.getElementById('shareCount').innerText = shareCount;
-      
         })
         .catch(error => {
             console.error('Error fetching video details:', error);
@@ -98,7 +84,7 @@ document.querySelector('.video-button').addEventListener('click', function () {
     }
 });
 
-// Handle forward and backward skip buttons
+// // Handle forward and backward skip buttons
 // document.querySelector('#forward').addEventListener('click', function () {
 //     document.getElementById('video').currentTime += 10;
 // });
@@ -108,14 +94,27 @@ document.querySelector('.video-button').addEventListener('click', function () {
 // });
 
 // Play/Stop video toggle button
+document.querySelector('#video').addEventListener('click', function () {
+    let video = document.getElementById('video');
+    if (video.paused) {
+        video.play();
+        document.querySelector('#play-stop').style.display="none"
+    } else {
+        video.pause();
+        document.querySelector('#play-stop').style.display="flex"
+    }
+});
+
+
+
 document.querySelector('#play-stop').addEventListener('click', function () {
     let video = document.getElementById('video');
     if (video.paused) {
         video.play();
-        togglePlayStopIcons(true);
+        document.querySelector('#play-stop').style.display="none"
     } else {
         video.pause();
-        togglePlayStopIcons(false);
+        document.querySelector('#play-stop').style.display="flex"
     }
 });
 
@@ -160,10 +159,10 @@ document.querySelector('#sound').addEventListener('click', function () {
 });
 
 // Function to toggle play and stop icons
-function togglePlayStopIcons(isPlaying) {
-    document.querySelector('#play').style.display = isPlaying ? 'none' : 'flex';
-    document.querySelector('#stop').style.display = isPlaying ? 'flex' : 'none';
-}
+// function togglePlayStopIcons(isPlaying) {
+//     document.querySelector('#play').style.display = isPlaying ? 'none' : 'flex';
+
+// }
 
 function toggleMuteButton(isMuted) {
     document.querySelector('#unmuted').style.display = isMuted ? 'none' : 'flex';
@@ -171,8 +170,8 @@ function toggleMuteButton(isMuted) {
 }
 
 // Show skip buttons when interacting with video
-document.querySelector('.video').addEventListener('mousemove', handleSkipButtons);
-document.querySelector('.video').addEventListener('touchstart', handleSkipButtons);
+// document.querySelector('.video').addEventListener('mousemove', handleSkipButtons);
+// document.querySelector('.video').addEventListener('touchstart', handleSkipButtons);
 
 // Function to handle showing and hiding skip buttons
 let timeout;
@@ -191,10 +190,7 @@ document.getElementById('video').addEventListener('loadeddata', function () {
     // make video element visible
     document.getElementById('video').style.display = 'inherit';
 
-    // document.getElementById('forward').style.display = 'none';
-    document.getElementById('play-stop').style.display = 'flex';
-    // document.getElementById('backward').style.display = 'none';
+    // document.getElementById('forward').style.display = 'block';
+    // document.getElementById('play-stop').style.display = 'block';
+    // document.getElementById('backward').style.display = 'block';
 });
-
-
-
